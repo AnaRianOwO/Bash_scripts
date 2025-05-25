@@ -1,13 +1,9 @@
 #!/bin/bash
 
-#Configuración owowowowo
-historial_file="$HOME/.calc_history"
-memoria=0
-
 #Función con un solo número
 unoSolo() {
   echo "Toncei un número uwu, ¿Qué hacemos con ese número?"
-  select opcion in "Potencia (x^2)" "Raíz cuadrada" "Seno" "Coseno" "Tangente" "Logaritmo natural" "Salir"; do
+  select opcion in "Potencia (x^2)" "Raíz cuadrada" "Seno" "Coseno" "Tangente" "Logaritmo natural" "Exponencial" "Múltiplo de 3" "Salir"; do
     case $opcion in
       "Potencia (x^2)") echo "$1^2" | bc ; break ;;
       "Raíz cuadrada") echo "scale=2; sqrt($1)" | bc -l ; break ;;
@@ -15,6 +11,8 @@ unoSolo() {
       "Coseno") echo "c($1)" | bc -l ; break ;;
       "Tangente") echo "s($1)/c($1)" | bc -l ; break ;;
       "Logaritmo natural") echo "l($1)" | bc -l ; break ;;
+      "Exponencial") echo "e($1)" | bc -l ; break ;;
+      "Múltiplo de 3") echo "$1 % 3" | bc ; break ;;
       "Salir") exit 0 ;;
       *) echo "Oye no >:c, esa opción no estaba"
     esac
@@ -24,7 +22,7 @@ unoSolo() {
 #Función con dos o más números
 multiples() {
   echo "Waos, entonces, trabajamos con $# números: $@ ¿Qué hacemos con esos números?"
-  select opcion in "Sumar" "Restar" "Multiplicar" "Dividir" "Promedio" "Salir"; do
+  select opcion in "Sumar" "Restar" "Multiplicar" "Dividir" "Promedio" "Múltiplo de" "Salir"; do
     case $opcion in
       "Sumar")
         suma=0
@@ -59,6 +57,11 @@ multiples() {
         done
         avg=$(echo "scale=2; $suma / $#" | bc)
         echo "Promedio: $avg" ; break ;;
+      "Múltiplo de")
+        num=$1
+        div=$2
+        resultado=$(echo "$num % $div" | bc)
+        [ "$resultado" -eq 0 ] && echo "Sí" || echo "No" ; break ;;
       "Salir") exit 0 ;;
         *) echo "que no unu, esa opción no está >:c" ;;
       esac
@@ -67,7 +70,6 @@ multiples() {
 
 if [ $# -eq 0 ]; then
   echo "Oye pero ponele un número bestie"
-
 elif [ $# -eq 1 ]; then
   unoSolo $1
 else
