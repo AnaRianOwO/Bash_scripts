@@ -3,7 +3,7 @@
 #Función con un solo número
 unoSolo() {
   echo "Toncei un número uwu, ¿Qué hacemos con ese número?"
-  select opcion in "Potencia (x^2)" "Raíz cuadrada" "Seno" "Coseno" "Tangente" "Logaritmo natural" "Exponencial" "Múltiplo de 3" "Salir"; do
+  select opcion in "Potencia (x^2)" "Raíz cuadrada" "Seno" "Coseno" "Tangente" "Logaritmo natural" "Exponencial" "Múltiplo de 3" "Sumar hasta" "Salir"; do
     case $opcion in
       "Potencia (x^2)") echo "$1^2" | bc ; break ;;
       "Raíz cuadrada") echo "scale=2; sqrt($1)" | bc -l ; break ;;
@@ -13,6 +13,7 @@ unoSolo() {
       "Logaritmo natural") echo "l($1)" | bc -l ; break ;;
       "Exponencial") echo "e($1)" | bc -l ; break ;;
       "Múltiplo de 3") echo "$1 % 3" | bc ; break ;;
+      "Sumar hasta") echo "$1 * (($1 + 1) / 2)" | bc ; break ;;
       "Salir") exit 0 ;;
       *) echo "Oye no >:c, esa opción no estaba"
     esac
