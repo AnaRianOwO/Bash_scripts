@@ -1,9 +1,14 @@
 #!/bin/bash
 
+#Configuración
+guardar_historial() {
+    echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1 = $2" >> ~/.calc_history
+}
+
 #Función con un solo número
 unoSolo() {
   echo "Toncei un número uwu, ¿Qué hacemos con ese número?"
-  select opcion in "Potencia (x^2)" "Raíz cuadrada" "Seno" "Coseno" "Tangente" "Logaritmo natural" "Exponencial" "Múltiplo de 3" "Sumar hasta" "Salir"; do
+  select opcion in "Potencia (x^2)" "Raíz cuadrada" "Seno" "Coseno" "Tangente" "Logaritmo natural" "Exponencial" "Múltiplo de 3" "Sumar hasta" "Sumar cuadrados hasta" "Sumar cubos hasta" "Fibonacci hasta" "Salir"; do
     case $opcion in
       "Potencia (x^2)") echo "$1^2" | bc ; break ;;
       "Raíz cuadrada") echo "scale=2; sqrt($1)" | bc -l ; break ;;
@@ -14,6 +19,20 @@ unoSolo() {
       "Exponencial") echo "e($1)" | bc -l ; break ;;
       "Múltiplo de 3") echo "$1 % 3" | bc ; break ;;
       "Sumar hasta") echo "$1 * (($1 + 1) / 2)" | bc ; break ;;
+      "Sumar cuadrados hasta")
+        sumaCuadrados=$(( ($1 * ($1 + 1) * (2 * $1 + 1)) / 6 ))
+        echo "Resultado: $sumaCuadrados" ; break ;;
+      "Sumar cubos hasta")
+        sumaCubos=$(( ($1 * ($1 + 1) / 2) ** 2 ))
+        echo "Resultado: $sumaCubos"; break ;;
+      "Fibonacci hasta")
+        a=0; b=1
+        for ((i=0; i<$1; i++)); do
+            echo -n "$a "
+            fn=$((a + b))
+            a=$b
+            b=$fn
+        done; break ;;
       "Salir") exit 0 ;;
       *) echo "Oye no >:c, esa opción no estaba"
     esac
@@ -69,10 +88,14 @@ multiples() {
     done
 }
 
-if [ $# -eq 0 ]; then
-  echo "Oye pero ponele un número bestie"
-elif [ $# -eq 1 ]; then
-  unoSolo $1
-else
-  multiples "$@"
-fi
+# Menú
+
+#while true; do
+  if [ $# -eq 0 ]; then
+    echo "Oye pero ponele un número bestie"
+  elif [ $# -eq 1 ]; then
+    unoSolo $1
+  else
+    multiples "$@"
+  fi
+#done
