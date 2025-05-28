@@ -1,8 +1,27 @@
 #!/bin/bash
 
 #Configuración
-guardar_historial() {
-    echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1 = $2" >> ~/.calc_history
+guardarHistorial() {
+    echo "$1 => $2 = $3" >> ~/.calc_history
+}
+
+# MCM y MCD
+
+mcm() {
+  local a=$1
+  local b=$2
+  local mcd=$(mcd $a $b)
+  echo $(( (a*b)/mcd ))
+}
+
+mcd() {
+  local a=$1
+  local b=$2
+  if (( b == 0 )); then
+    echo $a
+  else
+    mcd $b $((a % b))
+  fi
 }
 
 #Función con un solo número
@@ -10,7 +29,7 @@ unoSolo() {
   echo "Toncei un número uwu, ¿Qué hacemos con ese número?"
   select opcion in "Potencia (x^2)" "Raíz cuadrada" "Seno" "Coseno" "Tangente" "Logaritmo natural" "Exponencial" "Múltiplo de 3" "Sumar hasta" "Sumar cuadrados hasta" "Sumar cubos hasta" "Fibonacci hasta" "Salir"; do
     case $opcion in
-      "Potencia (x^2)") echo "$1^2" | bc ; break ;;
+      "Potencia (x^2)") echo "$1^2" | bc; break ;;
       "Raíz cuadrada") echo "scale=2; sqrt($1)" | bc -l ; break ;;
       "Seno") echo "s($1)" | bc -l ; break ;;
       "Coseno") echo "c($1)" | bc -l ; break ;;
@@ -42,7 +61,7 @@ unoSolo() {
 #Función con dos o más números
 multiples() {
   echo "Waos, entonces, trabajamos con $# números: $@ ¿Qué hacemos con esos números?"
-  select opcion in "Sumar" "Restar" "Multiplicar" "Dividir" "Promedio" "Múltiplo de" "Salir"; do
+  select opcion in "Sumar" "Restar" "Multiplicar" "Dividir" "Promedio" "Múltiplo de" "Mínimo común múltiplo (MCM)" "Máximo común divisor (MCD)" "Salir"; do
     case $opcion in
       "Sumar")
         suma=0
@@ -82,6 +101,10 @@ multiples() {
         div=$2
         resultado=$(echo "$num % $div" | bc)
         [ "$resultado" -eq 0 ] && echo "Sí" || echo "No" ; break ;;
+      "Mínimo común múltiplo (MCM)")
+        echo "Resultado: $(mcm $1 $2)"; break;;
+      "Máximo común divisor (MCD)")
+        echo "Resultado: $(mcd $1 $2)"; break;;         
       "Salir") exit 0 ;;
         *) echo "que no unu, esa opción no está >:c" ;;
       esac
