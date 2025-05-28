@@ -2,7 +2,21 @@
 
 #Configuración
 guardarHistorial() {
-    echo "$1 => $2 = $3" >> ~/.calc_history
+  local resultado="$1"
+  local operacion="$2"
+  shift 2
+  local numeros="$@"
+    echo "$resultado [$operacion] ($numeros)" >> ~/.calc_history
+}
+
+operacionUnNumero() {
+  local operacion="$1"
+  local expresion="$2"
+  local numero="$3"
+
+  local resultado=$(echo "$expresion" | bc -l)
+  guardarHistorial "$resultado" "$operacion" "$numero"
+  echo "El resultado es: $resultado"
 }
 
 # MCM y MCD
@@ -29,15 +43,16 @@ unoSolo() {
   echo "Toncei un número uwu, ¿Qué hacemos con ese número?"
   select opcion in "Potencia (x^2)" "Raíz cuadrada" "Seno" "Coseno" "Tangente" "Logaritmo natural" "Exponencial" "Múltiplo de 3" "Sumar hasta" "Sumar cuadrados hasta" "Sumar cubos hasta" "Fibonacci hasta" "Salir"; do
     case $opcion in
-      "Potencia (x^2)") echo "$1^2" | bc; break ;;
-      "Raíz cuadrada") echo "scale=2; sqrt($1)" | bc -l ; break ;;
-      "Seno") echo "s($1)" | bc -l ; break ;;
-      "Coseno") echo "c($1)" | bc -l ; break ;;
-      "Tangente") echo "s($1)/c($1)" | bc -l ; break ;;
-      "Logaritmo natural") echo "l($1)" | bc -l ; break ;;
-      "Exponencial") echo "e($1)" | bc -l ; break ;;
-      "Múltiplo de 3") echo "$1 % 3" | bc ; break ;;
-      "Sumar hasta") echo "$1 * (($1 + 1) / 2)" | bc ; break ;;
+    
+      "Potencia (x^2)") operacionUnNumero "$opcion" "$1^2" "$1"; break ;;
+      "Raíz cuadrada") operacionUnNumero "$opcion" "scale=2; sqrt($1)" "$1"; break ;;
+      "Seno") operacionUnNumero "$opcion" "s($1)" "$1"; break ;;
+      "Coseno") operacionUnNumero "$opcion" "c($1)" "$1"; break ;;
+      "Tangente") operacionUnNumero "$opcion" "s($1)/c($1)" "$1"; break ;;
+      "Logaritmo natural") operacionUnNumero "$opcion" "l($1)" "$1"; break ;;
+      "Exponencial") operacionUnNumero "$opcion" "e($1)" "$1"; break ;;
+      "Múltiplo de 3") operacionUnNumero "$opcion" "scale=0; $1 % 3" "$1"; break ;;
+      "Sumar hasta") operacionUnNumero "$opcion" "scale=0; $1 * (($1 + 1) / 2)" "$1"; break ;;
       "Sumar cuadrados hasta")
         sumaCuadrados=$(( ($1 * ($1 + 1) * (2 * $1 + 1)) / 6 ))
         echo "Resultado: $sumaCuadrados" ; break ;;
@@ -113,7 +128,7 @@ multiples() {
 
 # Menú
 
-#while true; do
+while true; do
   if [ $# -eq 0 ]; then
     echo "Oye pero ponele un número bestie"
   elif [ $# -eq 1 ]; then
@@ -121,4 +136,4 @@ multiples() {
   else
     multiples "$@"
   fi
-#done
+done
