@@ -55,10 +55,10 @@ unoSolo() {
       "Sumar hasta") operacionUnNumero "$opcion" "scale=0; $1 * (($1 + 1) / 2)" "$1"; break ;;
       "Sumar cuadrados hasta")
         sumaCuadrados=$(( ($1 * ($1 + 1) * (2 * $1 + 1)) / 6 ))
-        echo "Resultado: $sumaCuadrados" ; break ;;
+        operacionUnNumero "$opcion" "$sumaCuadrados" "$1"; break ;;
       "Sumar cubos hasta")
         sumaCubos=$(( ($1 * ($1 + 1) / 2) ** 2 ))
-        echo "Resultado: $sumaCubos"; break ;;
+        operacionUnNumero "$opcion" "$sumaCubos" "$1"; break ;;
       "Fibonacci hasta")
         a=0; b=1
         for ((i=0; i<$1; i++)); do
