@@ -83,6 +83,7 @@ multiples() {
         for num in "$@"; do
           suma=$(echo "$suma + $num" | bc)
         done
+        guardarHistorial "$suma" "$opcion" "$@"
         echo "Resultado: $suma" ; break ;;
       "Restar")
         res=$1
