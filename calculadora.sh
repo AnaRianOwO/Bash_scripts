@@ -85,38 +85,48 @@ multiples() {
         done
         guardarHistorial "$suma" "$opcion" "$@"
         echo "Resultado: $suma" ; break ;;
+
       "Restar")
         res=$1
         shift
         for num in "$@"; do
           res=$(echo "$res - $num" | bc)
         done
+        guardarHistorial "$res" "$opcion" "$@"
         echo "Resultado: $res" ; break ;;
+
       "Multiplicar")
         multi=1
         for num in "$@"; do
           multi=$(echo "$multi * $num" | bc)
         done
+        guardarHistorial "$multi" "$opcion" "$@"
         echo "Resultado: $multi" ; break ;;
+        
       "Dividir")
         div=$1
         shift
         for num in "$@"; do
           div=$(echo "scale=2; $div / $num" | bc)
         done
+        guardarHistorial "$div" "$opcion" "$@"
         echo "Resultado: $div" ; break ;;
+        
       "Promedio")
         suma=0
         for num in "$@"; do
           suma=$(echo "$suma + $num" | bc)
         done
         avg=$(echo "scale=2; $suma / $#" | bc)
+        guardarHistorial "$avg" "$opcion" "$@"
         echo "Promedio: $avg" ; break ;;
+        
       "Múltiplo de")
         num=$1
         div=$2
         resultado=$(echo "$num % $div" | bc)
         [ "$resultado" -eq 0 ] && echo "Sí" || echo "No" ; break ;;
+        
       "Mínimo común múltiplo (MCM)")
         echo "Resultado: $(mcm $1 $2)"; break;;
       "Máximo común divisor (MCD)")
