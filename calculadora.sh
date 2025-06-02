@@ -22,10 +22,13 @@ operacionUnNumero() {
 # MCM y MCD
 
 mcm() {
-  local a=$1
-  local b=$2
-  local mcd=$(mcd $a $b)
-  echo $(( (a*b)/mcd ))
+  local actualMCM=$1
+  shift
+
+  for num in "$@"; do
+    actualMCM=$(( (actualMCM * num) / $(mcd $actualMCM $num) ))
+  done
+  echo $actualMCM
 }
 
 mcd() {
@@ -36,6 +39,20 @@ mcd() {
   else
     mcd $b $((a % b))
   fi
+}
+
+mcdMultiplesNúmeros () {
+  local actualMCD=$1
+  shift
+
+  for num in "$@"; do
+    actualMCD=$(mcd $actualMCD $num)
+    if [[ $actualMCD -eq 1 ]]; then
+      break
+    fi
+  done
+
+  echo $actualMCD
 }
 
 #Función con un solo número
@@ -130,7 +147,7 @@ multiples() {
       "Mínimo común múltiplo (MCM)")
         echo "Resultado: $(mcm $1 $2)"; break;;
       "Máximo común divisor (MCD)")
-        echo "Resultado: $(mcd $1 $2)"; break;;         
+        echo "Resultado: $(mcdMultiplesNúmeros $1 $2)"; break;;         
       "Salir") exit 0 ;;
         *) echo "que no unu, esa opción no está >:c" ;;
       esac
