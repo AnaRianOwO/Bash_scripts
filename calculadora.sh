@@ -145,9 +145,14 @@ multiples() {
         [ "$resultado" -eq 0 ] && echo "Sí" || echo "No" ; break ;;
         
       "Mínimo común múltiplo (MCM)")
-        echo "Resultado: $(mcm $1 $2)"; break;;
+        resultado=$(mcm $@)
+        echo "Resultado: $resultado"
+        guardarHistorial "$resultado" "$opcion" "$@"; break;;
+        
       "Máximo común divisor (MCD)")
-        echo "Resultado: $(mcdMultiplesNúmeros $1 $2)"; break;;         
+        resultado=$(mcdMultiplesNúmeros $@)
+        echo "Resultado: $resultado"
+        guardarHistorial "$resultado" "$opcion" "$@"; break;;
       "Salir") exit 0 ;;
         *) echo "que no unu, esa opción no está >:c" ;;
       esac
