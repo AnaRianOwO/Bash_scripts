@@ -19,6 +19,19 @@ operacionUnNumero() {
   echo "El resultado es: $resultado"
 }
 
+menu() {
+  echo "¡Solucionado! Selecciona tu próxima opción uwu"
+  select option in "Seguir con el mismo número" "Seleccionar número del historial" "Escribir número" "Salir"
+  case $option in 
+  
+  "Seguir con el mismo número")
+    unoSolo $1; break;;
+  #"Seleccionar número del historial")
+  #"Escribir número")
+  "Salir") exit 0 ;;
+  *) echo "Oye no >:c, esa opción no estaba"
+  
+}
 # MCM y MCD
 
 mcm() {
@@ -153,6 +166,7 @@ multiples() {
         resultado=$(mcdMultiplesNúmeros $@)
         echo "Resultado: $resultado"
         guardarHistorial "$resultado" "$opcion" "$@"; break;;
+        
       "Salir") exit 0 ;;
         *) echo "que no unu, esa opción no está >:c" ;;
       esac
@@ -164,9 +178,12 @@ multiples() {
 while true; do
   if [ $# -eq 0 ]; then
     echo "Oye pero ponele un número bestie"
+    #menu()
   elif [ $# -eq 1 ]; then
     unoSolo $1
+    menu()
   else
     multiples "$@"
+    menu()
   fi
 done
