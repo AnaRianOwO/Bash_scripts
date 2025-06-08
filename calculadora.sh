@@ -181,9 +181,9 @@ while true; do
     #menu()
   elif [ $# -eq 1 ]; then
     unoSolo $1
-    menu()
+    #menu()
   else
     multiples "$@"
-    menu()
+    #menu()
   fi
 done
