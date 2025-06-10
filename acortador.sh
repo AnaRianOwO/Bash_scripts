@@ -26,7 +26,7 @@ fi
 if ! esComandOwO "$rutaScript"; then
     mkdir -p ~/.local/bin
     nombre_script=$(basename "$rutaScript")
-    cp "$rutaScript" ~/.local/bin/ || { echo "Error copiando el script"; exit 1; }
+    ln -sf "$rutaScript" ~/.local/bin/"$nombre_script" || { echo "Error creando el enlace simbólico"; exit 1; }
     chmod +x ~/.local/bin/"$nombre_script"
     aliasCMD="~/.local/bin/$nombre_script"
 else
