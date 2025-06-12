@@ -1,12 +1,14 @@
 #!/bin/bash
 
 #Configuración
+HISTORIAL_FILE="$HOME/.calc_history"
+
 guardarHistorial() {
   local resultado="$1"
   local operacion="$2"
   shift 2
   local numeros="$@"
-    echo "$resultado [$operacion] ($numeros)" >> ~/.calc_history
+    echo "$resultado [$operacion] ($numeros)" >> "$HISTORIAL_FILE"
 }
 
 operacionUnNumero() {
@@ -19,19 +21,16 @@ operacionUnNumero() {
   echo "El resultado es: $resultado"
 }
 
-menu() {
-  echo "¡Solucionado! Selecciona tu próxima opción uwu"
-  select option in "Seguir con el mismo número" "Seleccionar número del historial" "Escribir número" "Salir"
-  case $option in 
-  
-  "Seguir con el mismo número")
-    unoSolo $1; break;;
-  #"Seleccionar número del historial")
-  #"Escribir número")
-  "Salir") exit 0 ;;
-  *) echo "Oye no >:c, esa opción no estaba"
-  
+mostrarHistorial() {
+  echo "HISTORIAL DE OPERACIONES"
+  if [ -s "$HISTORIAL_FILE" ]; then
+    tail -n 10 "$HISTORIAL_FILE" | nl -w 2 -s ". "
+    echo "Ingresa el ID del número que quieres reusar uwu"
+  else
+    echo "No hay nada en el historial aún unu"
+  fi
 }
+
 # MCM y MCD
 
 mcm() {
@@ -168,22 +167,38 @@ multiples() {
         guardarHistorial "$resultado" "$opcion" "$@"; break;;
         
       "Salir") exit 0 ;;
-        *) echo "que no unu, esa opción no está >:c" ;;
+      *) echo "que no unu, esa opción no está >:c" ;;
       esac
     done
 }
 
 # Menú
+ingresarNumerosNuevos() {
+    echo "Introduce números separados por espacios (o 'salir'):"
+    read -p "> " input
+
+    [ "$input" = "salir" ] && break
+    read -a numeros <<< "$input"
+
+    case ${#numeros[@]} in
+        0) echo "Oye pero ponele números, bestie unu" ;;
+        1) unoSolo "${numeros[0]}" ;;
+        *) multiples "${numeros[@]}" ;;
+    esac
+}
 
 while true; do
-  if [ $# -eq 0 ]; then
-    echo "Oye pero ponele un número bestie"
-    #menu()
-  elif [ $# -eq 1 ]; then
-    unoSolo $1
-    #menu()
-  else
-    multiples "$@"
-    #menu()
-  fi
+  echo "Calculadoraaaaaaaaaaaaaa, ¿Qué vamos a hacer hoy uwu?"
+
+  select option in "Ingresar números" "Utilizar números del historial" "Utilizar resultados del historial" "Salir"; do
+    case $option in 
+
+      "Ingresar números")
+        ingresarNumerosNuevos ;;
+      #"Utilizar números del historial")
+      #"Utilizar resultados del historial")
+      "Salir")  exit 0;;
+      *) echo "Esa opción no estaba bestie unu";;
+    esac
+  done      
 done
