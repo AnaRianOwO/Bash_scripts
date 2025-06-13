@@ -22,12 +22,40 @@ operacionUnNumero() {
 }
 
 mostrarHistorial() {
+  opcion=$1
   echo "HISTORIAL DE OPERACIONES"
   if [ -s "$HISTORIAL_FILE" ]; then
     tail -n 10 "$HISTORIAL_FILE" | nl -w 2 -s ". "
     echo "Ingresa el ID del número que quieres reusar uwu"
+    read -p "> " input
+    extraerNumerosDeHistorial "$opcion" "$input"
   else
     echo "No hay nada en el historial aún unu"
+  fi
+}
+
+extraerNumerosDeHistorial() {
+  opcion=$1
+  local seleccionados=""
+  for num in $2; do
+      linea=$(tail -n 10 "$HISTORIAL_FILE" | sed -n "${num}p")
+      numeros=($(echo "$linea" | grep -oE '[0-9]+(\.[0-9]+)?'))
+
+      if [[ $opcion == "nums" ]]; then
+        seleccionados+=("${numeros[@]:1}")
+      elif [[ $opcion == "resultados" ]]; then
+        seleccionados+=("${numeros[0]}")
+      fi
+  done
+
+  seleccionados=($(echo "${seleccionados[@]}" | tr -s ' ' '\n' | grep -v '^$'))
+  
+  if [[ ${#seleccionados[@]} == 1 ]]; then
+    unoSolo "${seleccionados[@]}"
+  elif [[ ${#seleccionados[@]} -gt 1 ]]; then
+    multiples "${seleccionados[@]}"
+  else
+    echo "Ningun númerito"
   fi
 }
 
@@ -70,17 +98,17 @@ mcdMultiplesNúmeros () {
 #Función con un solo número
 unoSolo() {
   echo "Toncei un número uwu, ¿Qué hacemos con ese número?"
-  select opcion in "Potencia (x^2)" "Raíz cuadrada" "Seno" "Coseno" "Tangente" "Logaritmo natural" "Exponencial" "Múltiplo de 3" "Sumar hasta" "Sumar cuadrados hasta" "Sumar cubos hasta" "Fibonacci hasta" "Salir"; do
+  select opcion in "Potencia (^)" "Raíz cuadrada" "Seno" "Coseno" "Tangente" "Logaritmo natural" "Exponencial" "Múltiplo de tres" "Sumar hasta" "Sumar cuadrados hasta" "Sumar cubos hasta" "Fibonacci hasta" "Salir"; do
     case $opcion in
     
-      "Potencia (x^2)") operacionUnNumero "$opcion" "$1^2" "$1"; break ;;
+      "Potencia (^)") operacionUnNumero "$opcion" "$1^2" "$1"; break ;;
       "Raíz cuadrada") operacionUnNumero "$opcion" "scale=2; sqrt($1)" "$1"; break ;;
       "Seno") operacionUnNumero "$opcion" "s($1)" "$1"; break ;;
       "Coseno") operacionUnNumero "$opcion" "c($1)" "$1"; break ;;
       "Tangente") operacionUnNumero "$opcion" "s($1)/c($1)" "$1"; break ;;
       "Logaritmo natural") operacionUnNumero "$opcion" "l($1)" "$1"; break ;;
       "Exponencial") operacionUnNumero "$opcion" "e($1)" "$1"; break ;;
-      "Múltiplo de 3") operacionUnNumero "$opcion" "scale=0; $1 % 3" "$1"; break ;;
+      "Múltiplo de tres") operacionUnNumero "$opcion" "scale=0; $1 % 3" "$1"; break ;;
       "Sumar hasta") operacionUnNumero "$opcion" "scale=0; $1 * (($1 + 1) / 2)" "$1"; break ;;
       "Sumar cuadrados hasta")
         sumaCuadrados=$(( ($1 * ($1 + 1) * (2 * $1 + 1)) / 6 ))
@@ -195,8 +223,10 @@ while true; do
 
       "Ingresar números")
         ingresarNumerosNuevos ;;
-      #"Utilizar números del historial")
-      #"Utilizar resultados del historial")
+      "Utilizar números del historial")
+        mostrarHistorial "nums";;
+      "Utilizar resultados del historial")
+        mostrarHistorial "resultados";;
       "Salir")  exit 0;;
       *) echo "Esa opción no estaba bestie unu";;
     esac
