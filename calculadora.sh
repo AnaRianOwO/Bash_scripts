@@ -214,7 +214,7 @@ ingresarNumerosNuevos() {
         *) multiples "${numeros[@]}" ;;
     esac
 }
-
+# Menpu principal
 while true; do
   echo "Calculadoraaaaaaaaaaaaaa, ¿Qué vamos a hacer hoy uwu?"
 
