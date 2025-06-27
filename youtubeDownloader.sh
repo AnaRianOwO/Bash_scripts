@@ -4,9 +4,10 @@
 source $HOME/Mis_proyectos/Bash_scripts/config.sh
 
 archivo="/home/pilar/Documents/TXT/songs uwu.txt"
-formato="bestaudio"
+#formato="bestaudio/best"
 extension="mp3"
 carpetaDescargas="~/Music"
+Shh="--quiet --no-warnings"
 
 while IFS= read -r linea; do
   if [[ -z "$linea" ]]; then
@@ -15,12 +16,12 @@ while IFS= read -r linea; do
 
   echo "Buscando: '$linea' "
 
-  titulo=$(yt-dlp --cookies "$YT_COOKIES" --quiet --no-warnings --print title --default-search "ytsearch" "$linea")
+  titulo=$(yt-dlp --cookies "$YT_COOKIES" $Shh --print title --default-search "ytsearch" "$linea")
   
-  yt-dlp --cookies "$YT_COOKIES" --quiet --no-warnings \
-    --extract-audio \
-    --format "$formato" \
+  yt-dlp --cookies "$YT_COOKIES" $Shh \
+    --extract-audio \    
     --audio-format "$extension" \
+#    --format "$formato" \
     --output "$carpetaDescargas/%(title)s.%(ext)s" \
     --default-search "ytsearch" \
     "$linea"
