@@ -31,7 +31,7 @@ Funciones:
 * Exponencial y logaritmo natural.
 * Sumar números, cuadrados y cubos hasta.
 
-Ponle uno o más números y selecciona la opción adecuada uwu.
+Ejecutalo y verás el menú uwuwuwu.
 
 ### Auto Git.
 > [!NOTE] 
@@ -49,3 +49,18 @@ Te pide el comentario para ponerle a los cambios, y ya por último lo sube exito
 El script permite que coloques un comando en el mismo, ya sea uno integrado en el sistema o un script que hayas creado.
 Luego verifica que existe el archivo y lo copia a .local/bin/, haciendolo un ejecutable con chmod+x primero, en donde se podrán ejecutar correctamente.
 Posteriormente, crea el alias y lo guarda en .bashrc; por último,  muestra el mensaje de confirmación en cowsay.
+
+
+### Espacios de programación.
+> [!NOTE] 
+> Script para crear una sesión en tmux para programar.
+
+El script permite que coloques una carpeta y un alias, luego cuando la ejecutes te permite una sesión en tmux con dos paneles, simulando un IDE.
+Se pueden agregar cualquier carpeta, aparte de guardarse en un archivo de configuración.
+
+### Descargador de música en youtube.
+> [!NOTE] 
+> Script para descargar videos en youtube en formato mp3.
+
+El script permite que se descarguen videos de Youtube en formato mp3 con base a una lista de url en un archivo txt.
+Luego de buscar la pelicula con yt-dlp, se guarda en la carpeta principal de música.
