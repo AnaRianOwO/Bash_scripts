@@ -39,6 +39,19 @@ agregarAlias() {
   echo "Éxito: el alias '$alias' se ha agregado para la ruta de '$projectPath'"
 }
 
+mostrarRuta() {
+  local alias="$1"
+
+  if [ -z "$alias"  ]; then
+    echo "Alias no encontrado"
+    exit 1
+  fi
+
+  local projectPath=$(grep "^$alias=" "$CONFIG_FILE" | cut -d'=' -f2-)
+  echo "$projectPath" | xclip -selection clipboard
+  echo "Copiado al portapapeles exitosamente uwu"
+}
+
 ayuda() {
   echo "Uso:"
   echo "  $0 [ALIAS]              # Iniciar proyecto"
@@ -58,7 +71,9 @@ case "$1" in
         ayuda;;
     "")
         ayuda;;
+    "pwd")
+        mostrarRuta "$2";;
     *)
-        iniciarProyecto "$1"
-        ;;
+        iniciarProyecto "$1";;
+      
 esac
