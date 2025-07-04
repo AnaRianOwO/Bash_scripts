@@ -47,7 +47,7 @@ mostrarRuta() {
     exit 1
   fi
 
-  local projectPath=$(grep "^$alias=" "$CONFIG_FILE" | cut -d'=' -f2-)
+  local projectPath=$(grep "^$alias=" "$CONFIG_FILE" | cut -d'=' -f2- | tr -d '\n')
   echo "$projectPath" | xclip -selection clipboard
   echo "Copiado al portapapeles exitosamente uwu"
 }
