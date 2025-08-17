@@ -17,7 +17,7 @@ iniciarProyecto() {
   tmux new-session -d -s "$alias" -c "$projectPath"
   tmux split-window -v -p 50 -c "$projectPath"
 
-  tmux send-keys -t "$alias":0.1 "ls -la" C-m
+  tmux send-keys -t "$alias":0.1 "tree" C-m
   tmux attach-session -t "$alias"
 }
 
