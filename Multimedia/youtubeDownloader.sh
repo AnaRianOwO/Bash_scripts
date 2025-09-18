@@ -6,7 +6,7 @@ source $HOME/Mis_proyectos/Bash_scripts/config.sh
 archivo="/home/pilar/Documents/TXT/songs uwu.txt"
 #formato="bestaudio/best"
 extension="mp3"
-carpetaDescargas="~/Music"
+carpetaDescargas="~/Music/bajalo"
 Shh="--quiet --no-warnings"
 
 while IFS= read -r linea; do
