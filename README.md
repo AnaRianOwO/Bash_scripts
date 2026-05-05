@@ -1,6 +1,9 @@
 # Mis scripts de Bash uwuwuwu
 -------------------------
 
+Pronto más organización en este campo uwu
+
+
 ### Organizador de archivos.
 > [!NOTE] 
 > Script para organizar los archivos por su extensión de una carpeta seleccionada.
