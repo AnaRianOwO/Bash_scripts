@@ -17,9 +17,11 @@ iniciarProyecto() {
   echo "Iniciando proyecto $aliasName en $projectPath"
 
   tmux new-session -d -s "$aliasName" -c "$projectPath"
+  tmux split-window -h -p 50 -c "$projectPath"
+  tmux select-pane -t 1
   tmux split-window -v -p 50 -c "$projectPath"
 
-  tmux send-keys -t "$aliasName":0.1 "autopull" C-m
+  tmux send-keys -t "$aliasName":0.2 "autopull" C-m
   tmux send-keys -t "$aliasName":0.1 "ls" C-m
   tmux attach-session -t "$aliasName"
 }

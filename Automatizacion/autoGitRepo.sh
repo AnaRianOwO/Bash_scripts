@@ -1,20 +1,4 @@
 #!/bin/bash
-
-if [ -z "$1" ]; then
-    repoPath="."
-    echo "No se especificó carpeta, bestie. Usando el repositorio actual uwu..."
-else
-    repoPath="$1"
-fi
-
-
-cd "$repoPath" || { echo "Error: Carpeta no encontrada unu"; exit 1; }
-
-if [ ! -d ".git" ]; then
-  echo "No es un repositorio unu"
-  exit 1
-fi
-
 subelo() {
   git add *
   echo "Estos son los cambios que se agregan al repositorio"
@@ -42,6 +26,7 @@ subelo() {
   fi
 }
 
+
 traelo() {
   echo "Buscando cambios remotos..."
   git fetch
@@ -51,6 +36,21 @@ traelo() {
 
   echo "Espero se haya actualizado uwu"
 }
+
+if [ -z "$1" ]; then
+    repoPath="."
+    echo "No se especificó carpeta, bestie. Usando el repositorio actual uwu..."
+else
+    repoPath="$1"
+fi
+
+
+cd "$repoPath" || { echo "Error: Carpeta no encontrada unu"; exit 1; }
+
+if [ ! -d ".git" ]; then
+  echo "No es un repositorio unu, primero agregalo a GitHub"
+  exit 1
+fi
 
 case $2 in 
   "push")
