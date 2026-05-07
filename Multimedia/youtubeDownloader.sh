@@ -26,11 +26,11 @@ while IFS= read -r linea; do
     --default-search "ytsearch" \
     "$linea"
 
-  if [ $? -eq 0 ]; then
-    echo "Descargado: '$titulo'"
-  else
+  if ![ $? -eq 0 ]; then
     echo "Error al descargar: '$linea'"
   fi
+
+  echo "Descargado: '$titulo'"
 
 done < "$archivo"
 

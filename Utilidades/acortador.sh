@@ -3,7 +3,7 @@
 esComandOwO() {
   [[ "$1" == *" "* ]]
 }
-# El código funciona con cowsay, si no se desea, cambiar la línea  por echo
+
 if ! command -v cowsay &> /dev/null; then
     echo "Instalando cowsay para diversión máxima..."
     sudo apt install cowsay -y
@@ -23,15 +23,15 @@ if [[ "$rutaScript" == *.c ]]; then
   rutaScript="$binario"
 fi
 
-if ! esComandOwO "$rutaScript"; then
-    mkdir -p ~/.local/bin
-    nombre_script=$(basename "$rutaScript")
-    ln -sf "$rutaScript" ~/.local/bin/"$nombre_script" || { echo "Error creando el enlace simbólico"; exit 1; }
-    chmod +x ~/.local/bin/"$nombre_script"
-    aliasCMD="~/.local/bin/$nombre_script"
-else
-    aliasCMD="$rutaScript"  # Es un comando directo (ej: "sudo apt update")
+if esComandOwO "$rutaScript"; then
+    aliasCMD="$rutaScript"
 fi
+
+mkdir -p ~/.local/bin
+nombre_script=$(basename "$rutaScript")
+ln -sf "$rutaScript" ~/.local/bin/"$nombre_script" || { echo "Error creando el enlace simbólico"; exit 1; }
+chmod +x ~/.local/bin/"$nombre_script"
+aliasCMD="~/.local/bin/$nombre_script"
 
 echo "alias $aliasNombre=\"$aliasCMD\"" >> ~/.bashrc
 

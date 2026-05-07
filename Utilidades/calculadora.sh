@@ -24,14 +24,15 @@ operacionUnNumero() {
 mostrarHistorial() {
   opcion=$1
   echo "HISTORIAL DE OPERACIONES"
-  if [ -s "$HISTORIAL_FILE" ]; then
-    tail -n 10 "$HISTORIAL_FILE" | nl -w 2 -s ". "
-    echo "Ingresa el ID del número que quieres reusar uwu"
-    read -p "> " input
-    extraerNumerosDeHistorial "$opcion" "$input"
-  else
+  if ![ -s "$HISTORIAL_FILE" ]; then
     echo "No hay nada en el historial aún unu"
+    return 0
   fi
+  
+  tail -n 10 "$HISTORIAL_FILE" | nl -w 2 -s ". "
+  echo "Ingresa el ID del número que quieres reusar uwu"
+  read -p "> " input
+  extraerNumerosDeHistorial "$opcion" "$input"
 }
 
 extraerNumerosDeHistorial() {
