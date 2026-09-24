@@ -3,11 +3,14 @@
 CONFIG_FILE="$HOME/.config/project_launcher.conf"
 aliasName="$1"
 projectPath="$2"
+archivoconf="$HOME/Mis_proyectos/Bash_scripts/Automatizacion/programa.sh"
+HISTORY_FILE="$HOME/.config/history_projects.conf"
 
 iniciarProyecto() {
   local aliasName="$1"
   local projectPath=$(grep "^$aliasName=" "$CONFIG_FILE" | cut -d'=' -f2-)
-
+  local historyPath=$(grep "^$aliasName=" "$HISTORY_FILE" | cut -d'=' -f2-)
+  
   if [ -z "$projectPath" ]; then
     echo "Error: Alias '$aliasName' no encontrado unu"
     echo "Usa agregar $aliasName /ruta/al/proyecto para crearlo"
@@ -21,6 +24,14 @@ iniciarProyecto() {
   tmux select-pane -t 1
   tmux split-window -v -p 50 -c "$projectPath"
 
+  if [ -n "$historyPath" ]; then
+    if [ -f "$historyPath" ]; then
+      tmux send-keys -t "$aliasName":0.0 "micro $historyPath" C-m
+    else
+      tmux send-keys -t "$aliasName":0.0 "echo 'Archivo no encontrado: $historyPath'" C-m
+    fi
+  fi
+  
   tmux send-keys -t "$aliasName":0.2 "autopull" C-m
   tmux send-keys -t "$aliasName":0.1 "ls" C-m
   tmux attach-session -t "$aliasName"
@@ -66,6 +77,35 @@ cerrarProyecto() {
   echo "¡Sesión '$sesion' cerrada!"
 }
 
+editarConf() {
+  micro $archivoconf
+}
+
+añadirPredeterminado(){
+  local aliasName="$2"
+  local archivo="$3"
+  
+  if [ -z "$aliasName" ] || [ -z "$archivo" ]; then
+    echo "Error: Se usa: $0 abrir ALIAS archivo"
+    exit 1
+  fi
+  
+  if [ ! -f "$archivo" ]; then
+    echo "Error: El archivo '$archivo' no existe"
+    exit 1
+  fi
+  
+  local rutaAbsoluta=$(realpath "$archivo")
+  
+  if grep -q "^$aliasName=" "$HISTORY_FILE"; then
+    sed -i "/^$aliasName=/d" "$HISTORY_FILE"
+  fi
+  
+  echo "$aliasName=$rutaAbsoluta" >> "$HISTORY_FILE"
+  echo "Éxito: archivo predeterminado para '$aliasName': $rutaAbsoluta"
+}
+
+
 ayuda() {
   echo "Uso:"
   echo "  $0 [ALIAS]              # Iniciar proyecto"
@@ -85,6 +125,10 @@ case "$1" in
         mostrarRuta "$@";;
     "cerrar"|"close"|"finalizar")
         cerrarProyecto;;
+    "edit"|"editar")
+        editarConf;;
+    "predeterminado"|"default")
+        añadirPredeterminado "$@";;
     "ayuda"|"help"|"--help"|"-h"|"")
         ayuda;;
     *)
